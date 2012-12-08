@@ -23,18 +23,6 @@ function parse_git_branch {
             git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 
-function exitstatus {
-
-    EXITSTATUS="$?"
-
-    if [ "${EXITSTATUS}" -eq 0 ]
-    then
-            PS1="\n\[\033[01;34m\]\u @ $(hostname) \w\n\[\033[0;36m\]\t \[\e[32;1m\]:) ⚡ \[\033[0;39m\]"
-    else
-            PS1="\n\[\033[01;34m\]\u @ $(hostname) \w\n\[\033[0;36m\]\t \[\033[1;31m\]:( ⚡ \[\033[0;39m\]"
-    fi
-}
-
 function prompt_with_git {
         EXITSTATUS="$?"
         branch=$(parse_git_branch)
@@ -46,11 +34,16 @@ function prompt_with_git {
                 branch=$BGreen$branch
         fi
 
+        if [[ $UID == "0" ]]; then
+                user=$BRed$User
+        else
+                user=$BGreen$User
+        fi
         if [ "${EXITSTATUS}" -eq 0 ]
         then
-                PS1="$NewLine$BRed$User @ $BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BGreen}:) ⚡ $Color_Off"
+                PS1="$NewLine$user - $BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BGreen}:) ⚡ $Color_Off"
         else
-                PS1="$NewLine$BRed$User @ $BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BRed}:( ⚡ $Color_Off"
+                PS1="$NewLine$user - $BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BRed}:( ⚡ $Color_Off"
         fi
 }
 
