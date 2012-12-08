@@ -1,12 +1,12 @@
-[submodule ".vim/bundle/fugitive"]
-	path = .vim/bundle/fugitive
+[submodule "vim/bundle/fugitive"]
+	path = vim/bundle/fugitive
 	url = http://github.com/tpope/vim-fugitive.git
-[submodule ".vim/bundle/vim-colors-solarized"]
-	path = .vim/bundle/vim-colors-solarized
+[submodule "vim/bundle/vim-colors-solarized"]
+	path = vim/bundle/vim-colors-solarized
 	url = http://github.com/altercation/vim-colors-solarized.git
-[submodule ".vim/bundle/vim-golang"]
-	path = .vim/bundle/vim-golang
+[submodule "vim/bundle/vim-golang"]
+	path = vim/bundle/vim-golang
 	url = http://github.com/jnwhiteh/vim-golang.git
-[submodule ".vim/bundle/vim-pasta"]
-	path = .vim/bundle/vim-pasta
+[submodule "vim/bundle/vim-pasta"]
+	path = vim/bundle/vim-pasta
 	url = http://github.com/sickill/vim-pasta.git
