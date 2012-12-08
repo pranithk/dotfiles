@@ -48,9 +48,9 @@ function prompt_with_git {
 
         if [ "${EXITSTATUS}" -eq 0 ]
         then
-                PS1="$NewLine$BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BGreen}:) ⚡ $Color_Off"
+                PS1="$NewLine$BRed$User @ $BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BGreen}:) ⚡ $Color_Off"
         else
-                PS1="$NewLine$BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BRed}:( ⚡ $Color_Off"
+                PS1="$NewLine$BRed$User @ $BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BRed}:( ⚡ $Color_Off"
         fi
 }
 
