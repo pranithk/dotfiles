@@ -1,0 +1,11 @@
+pushd -n /home/pranithk/code-reading/youtube-dl > /dev/null
+pushd -n /home/pranithk/.scripts > /dev/null
+pushd -n /usr/local/var/log/glusterfs/bricks > /dev/null
+pushd -n /usr/local/var/log/glusterfs/ > /dev/null
+pushd -n /var/lib/glusterd > /dev/null
+pushd -n /home/pranithk/workspace/gluster-tests/afr > /dev/null
+pushd -n /home/pranithk/workspace/gerrit-repo/tests/bugs > /dev/null
+pushd -n /home/pranithk/workspace/gerrit-repo/libglusterfs/src/ > /dev/null
+pushd -n /home/pranithk/workspace/gerrit-repo/xlators/mgmt/glusterd/src/ > /dev/null
+pushd -n /home/pranithk/workspace/gerrit-repo/xlators/cluster/afr/src/ > /dev/null
+pushd -n /home/pranithk/workspace/gerrit-repo/ > /dev/null

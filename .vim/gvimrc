@@ -1,0 +1,10 @@
+source $HOME/.vimrc
+set guifont=Aurulent\ Sans\ Mono\ 12
+"colorscheme gravity
+colorscheme solarized
+set guioptions-=m "remove menubar
+set guioptions-=T "remove toolbar
+set guioptions-=r "remove scrollbar
+"set columns=85
+"set lines=48
+set t_vb= "this removes visual bell

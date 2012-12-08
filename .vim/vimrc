@@ -1,0 +1,137 @@
+"basic things
+set rtp+=~/go/misc/vim
+set nocompatible
+set modelines=0
+syntax on
+set undoreload=10000                                    " Save whole buffer for undo when reloading it
+set undofile                                            " Specify new location for vim7.3 persistent undo file
+set undodir=~/.vim/.undo                                " Put undo history into ~/.vim/undo
+set backup                                              " turn backups on
+set backupdir=~/.vim/.backup                            " Where to keep backup files
+set directory=~/.vim/.tmp                               " Where to keep swap files
+set lazyredraw                                          " Don't redraw screen when executing macros/untyped cmds
+
+"search/replace/moving options
+set ignorecase
+set incsearch
+set hlsearch
+set gdefault
+set smartcase
+set showmatch
+
+"status line
+set showmode
+set laststatus=2
+"set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l/%L:%c
+
+" Make vim silent
+set noerrorbells
+set vb
+" Tabs and indenting
+set tabstop=8
+set shiftwidth=8
+set softtabstop=8
+set autoindent
+set smartindent
+set expandtab
+
+"new options that make things better
+set encoding=utf-8
+set scrolloff=0
+set showcmd
+set hidden
+set wildmenu
+set wildmode=list:longest
+set cursorline
+set ttyfast
+set ruler
+set backspace=indent,eol,start
+set relativenumber
+
+"set makeprg=sudo\ make\ -j\ 32\ install\ CFLAGS=\"-DDEBUG\ -g3\ -O0\"
+set makeprg=sudo\ make\ -j\ 32\ install\ CFLAGS=\"-DDEBUG\ -Werror\ -g3\ -O0\"
+"autocmd BufWinEnter *.[ch] match ExtraWhitespace /\s\+$/
+"autocmd InsertEnter *.[ch] match ExtraWhitespace /\s\+\%#\@<!$/
+"autocmd InsertLeave *.[ch] match ExtraWhitespace /\s\+$/
+autocmd BufReadPost fugitive://* set bufhidden=delete
+au FocusLost * :wa
+"highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+"match OverLength /\%81v.\+/
+filetype on
+filetype plugin on
+filetype plugin indent on
+set ofu=syntaxcomplete
+
+set autowrite
+
+"long lines
+set wrap
+"set textwidth=80
+set formatoptions=qrn1
+set colorcolumn=81
+highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+match ExtraWhitespace /\s\+$/
+
+set dictionary+=/usr/share/dict/words
+"set complete-=k complete+=k
+
+"source browsing
+if has("cscope")
+        set csto=0
+        set cst
+        set nocsverb
+        " add any database in current directory
+        if filereadable("cscope.out")
+            cs add cscope.out
+        endif
+        set csverb
+endif
+set tags=tags
+
+highlight Normal     guifg=gray guibg=black
+""""" Mappings
+
+"gluster work specific
+nnoremap <Leader>afr :args xlators/cluster/afr/src/*.c<CR>
+nnoremap <Leader>gd :args xlators/mgmt/glusterd/src/*.c<CR>
+
+nnoremap <Leader>f :cs f f 
+nnoremap <Leader>cd :cd %:p:h<CR>
+nnoremap <Leader>cd- :cd -<CR>
+nnoremap <Leader>f :cs f f 
+nnoremap <Leader>a :Tabularize /[a-zA-Z0-9_*]*\s*=<CR>:Tabularize /=<CR>
+vnoremap <Leader>a :Tabularize /[a-zA-Z0-9_*]*\s*=<CR>:Tabularize /=<CR>
+
+noremap ; :
+inoremap jj <ESC>
+cnoremap jj <ESC>
+nnoremap j gj
+nnoremap k gk
+
+nnoremap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nnoremap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nnoremap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nnoremap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nnoremap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nnoremap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nnoremap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nnoremap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+"splits
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+"au VimResized * exe "normal! \<c-w>="
+
+nnoremap <F5> :make<CR>
+nnoremap <F3> a<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
+inoremap <F3> <C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR>
+nnoremap <C-@> :buffers<CR>:buffer<Space>
+" use enter and shift + enter to give new lines
+nnoremap <C-n> :cn<CR>
+nnoremap <C-p> :cp<CR>
+inoremap <C-v> <C-r>*
+vnoremap <C-c> "+y
+cnoremap w!! !sudo tee > /dev/null %
+call pathogen#infect()
