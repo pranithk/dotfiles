@@ -5,10 +5,10 @@ set modelines=0
 syntax on
 set undoreload=10000                                    " Save whole buffer for undo when reloading it
 set undofile                                            " Specify new location for vim7.3 persistent undo file
-set undodir=~/.vim/.undo                                " Put undo history into ~/.vim/undo
+set undodir=~/.vimundo                                " Put undo history into ~/.vimundo
 set backup                                              " turn backups on
-set backupdir=~/.vim/.backup                            " Where to keep backup files
-set directory=~/.vim/.tmp                               " Where to keep swap files
+set backupdir=~/.vimbackup                            " Where to keep backup files
+set directory=~/.vimtmp                               " Where to keep swap files
 set lazyredraw                                          " Don't redraw screen when executing macros/untyped cmds
 
 "search/replace/moving options
