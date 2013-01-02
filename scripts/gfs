@@ -44,12 +44,19 @@ def get_paths(options)
         paths
 end
 
-def get_volinfo_paths(volinfo)
-        paths = ""
+def parse_bricks(volinfo)
+        paths = []
+        hostname = nil
         volinfo.each_line do |line|
-                paths = paths + line[/^Brick\d+:.*:(.*)/,1].to_s + " "
+                brick_regex = /^Brick\d+: (.*):(.*)/
+                hostname ||= line[brick_regex,1]
+                path = line[brick_regex,2]
+                if path == nil
+                        next
+                end
+                paths.push(path)
         end
-        paths
+        return hostname, paths
 end
 
 def get_volume_from_options(options)
@@ -123,7 +130,7 @@ def get_volume_from_volinfo(options)
         end
         vol = {}
         vol[:volname] = options[:volname]
-        vol[:paths] = get_volinfo_paths(volinfo)
+        vol[:hostname], vol[:paths] = parse_bricks(volinfo)
         vol[:mount] = get_mount(options[:volname])
         vol
 end
@@ -131,8 +138,28 @@ end
 def teardown_setup(vol)
         execute("gluster --mode=script volume stop #{vol[:volname]}")
         execute("gluster --mode=script volume delete #{vol[:volname]}")
-        execute("rm -rf #{vol[:paths]}")
+        execute("rm -rf #{vol[:paths].join(" ")}")
         execute("umount #{vol[:mount]}")
+end
+
+def get_rundir()
+        "/var/lib/glusterd/"
+end
+
+def kill_bricks(brick_ids, vol)
+        brickid_list = brick_ids.split(/,/)
+        paths = vol[:paths]
+        dir = get_rundir()+"vols/"+vol[:volname]+"/run/"
+        puts "Dir: #{dir}"
+        Dir.chdir(dir) do
+                brickid_list.each() do |brickid|
+                        pidfile = vol[:hostname] + paths[brickid.to_i].tr('/', '-') + ".pid"
+                        File.open(pidfile) do |file|
+                                pid = file.gets()
+                                execute("kill -9 #{pid}")
+                        end
+                end
+        end
 end
 
 options[:replcount] = 1
@@ -141,7 +168,7 @@ options[:dhtcount] = 1
 optparse = OptionParser.new do|opts|
         opts.banner = 'Usage -c command -v volname [vol-args]'
         opts.on('-c', '--command COMMAND', 'setup/teardown/download/install') do |command|
-                if not ['s', 't', 'd', 'i'].include? command
+                if not ['s', 't', 'd', 'i', 'k'].include? command
                         abort "Invalid command"
                 end
                 options[:command] = command
@@ -162,6 +189,9 @@ optparse = OptionParser.new do|opts|
                 else
                         abort "Invalid stripe count"
                 end
+        end
+        opts.on('-k', '--kill BRICK-IDS', 'comma separated brick ids') do |brick_ids|
+                options[:brick_ids] = brick_ids
         end
         #optional argument
         opts.on('-d', '--dht COUNT', '[vol-args] dht count') do |count|
@@ -193,6 +223,9 @@ when 'd'
         download_qabuild(version)
 when 'i'
         print `./autogen.sh && ./configure && make CFLAGS=\"-DDEBUG -g3\" install -j 32 1>/dev/null`
+when 'k'
+        vol = get_volume_from_volinfo(options)
+        kill_bricks(options[:brick_ids], vol)
 else
-        abort "Invalid command"
+        abort "Invalid command #{options[:command]}"
 end
