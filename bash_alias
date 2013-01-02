@@ -92,4 +92,3 @@ alias irb='irb --readline -r irb/completion'
 alias cdr='cd ./$(git rev-parse --show-cdup)'
 alias vim='vimx'
 alias todo="gvim -c 'source ~/workspace/TODO/todo'"
-alias am='/home/pranithk/.scripts/am.sh'
