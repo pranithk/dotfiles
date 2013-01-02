@@ -1,0 +1,12 @@
+#!/bin/bash -x
+id=$1
+rev=$2
+patch="/tmp/${id}_${rev}.patch"
+git fetch http://review.gluster.org/p/glusterfs refs/changes/${id: -2}/$id/$rev && git format-patch -1 --stdout FETCH_HEAD > $patch || exit
+git apply $patch
+if [ $? != 0 ];
+then
+        echo "patch is stored at $patch";
+else
+        rm -f $patch
+fi

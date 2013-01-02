@@ -1,0 +1,71 @@
+#!/usr/bin/ruby -w
+
+def execute(cmd)
+        puts cmd
+        out = `#{cmd}`
+        return out, $?
+end
+
+def create_patch(hash_id)
+        patch_name, ok = execute("git format-patch -n -1 #{hash_id}")
+        if ok.to_i != 0
+                abort "Format Patch failed #{ok}"
+        end
+        return patch_name
+end
+
+def create_patches(repo, patchlistfile)
+        patches = []
+        Dir.chdir(repo) do
+                File.open(patchlistfile, "r") do |fp|
+                        while(hash_id = fp.gets())
+                                patch_name = create_patch(hash_id)
+                                patches.push(repo + patch_name)
+                        end
+                end
+        end
+        return patches
+end
+
+def apply_patch (patch_name)
+        out, ok = execute("git am #{patch_name}")
+        if ok.to_i != 0
+                execute("git am --abort")
+        end
+        return ok
+end
+
+def apply_patches(repo, patches)
+        succeeded = []
+        failed = []
+        Dir.chdir(repo) do
+                patches.each do |patch|
+                        ok = apply_patch(patch)
+                        if ok.to_i != 0
+                                failed.push(patch)
+                        else
+                                succeeded.push(patch)
+                        end
+                end
+        end
+        return succeeded, failed
+end
+
+workspace = "/home/pranithk/workspace/"
+src_repo = workspace + "gerrit-repo/"
+dst_repo = workspace + "rhs-glusterfs/"
+patchlistfile = "patchlist"
+patches = create_patches(src_repo, patchlistfile)
+succeeded, failed = apply_patches(dst_repo, patches)
+
+if patches.count != 0
+        puts "Following patches failed"
+        failed.each do |patch|
+                puts patch
+        end
+else
+        patches.each do |patch|
+                File.unlink(patch)
+        end
+        puts "go go go. :-)"
+end

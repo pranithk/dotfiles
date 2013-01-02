@@ -1,0 +1,198 @@
+#!/usr/bin/ruby -w
+require 'optparse'
+require 'net/http'
+
+options = {}
+
+def download_qabuild(version)
+        tarball = "glusterfs-"+version+".tar.gz"
+        print "Downloading tarball" + tarball
+        Net::HTTP.start("bits.gluster.com") do |http|
+                resp = http.get("/gluster/glusterfs/src/"+tarball)
+                open(tarball, "wb") do |file|
+                        file.write(resp.body)
+                        print "*"
+                end
+        end
+        puts "Done."
+end
+
+def execute(cmd)
+	puts cmd
+	puts `#{cmd}`
+        if $?.to_i != 0
+                abort "script execution failed: #{$?}"
+        end
+end
+
+def get_mount (volname)
+        "/mnt/" + volname
+end
+
+def get_volname(options)
+        "dht" + options[:dhtcount].to_s +
+        "repl" + options[:replcount].to_s +
+        "stripe" + options[:stripecount].to_s
+end
+
+def get_paths(options)
+        paths = ""
+        brick_count = options[:dhtcount] * options[:replcount] * options[:stripecount]
+        for i in 0..(brick_count - 1)
+               paths += "/gfs/"+ options[:volname] + "_" + i.to_s + " "
+        end
+        paths
+end
+
+def get_volinfo_paths(volinfo)
+        paths = ""
+        volinfo.each_line do |line|
+                paths = paths + line[/^Brick\d+:.*:(.*)/,1].to_s + " "
+        end
+        paths
+end
+
+def get_volume_from_options(options)
+        vol = {}
+        vol[:replcount] = options[:replcount]
+        vol[:stripecount] = options[:stripecount]
+        vol[:dhtcount] = options[:dhtcount]
+        vol[:volname] = options[:volname]
+        vol[:paths] = get_paths(options)
+        vol[:mount] = get_mount(options[:volname])
+        vol
+end
+
+def get_bricks(paths, hostname)
+        bricks=[]
+        paths.split().each do |path|
+                bricks.push(hostname+':'+path)
+        end
+        bricks.join(' ')
+end
+
+def get_volargs(vol)
+        if vol[:replcount] > 1 and vol[:stripecount] > 1
+                "replica #{vol[:replcount]} stripe #{vol[:stripecount]}"
+        elsif vol[:replcount] > 1
+                "replica #{vol[:replcount]}"
+        elsif vol[:stripecount] > 1
+                "stripe #{vol[:stripecount]}"
+        else
+                ""
+        end
+end
+
+def start_glusterd
+        if `pgrep glusterd` == ""
+                execute("glusterd")
+        end
+end
+
+def abort_non_root
+        if Process.euid != 0
+                abort "Only root can execute this script"
+        end
+end
+
+def abort_on_missing_args(options)
+        if options[:command].nil?
+                abort "Missing --command"
+        elsif options[:command] != 'i' and options[:volname].nil?
+                abort "Missing --volname"
+        end
+end
+
+def init_setup(vol)
+        #hostname=`hostname`.chomp!
+        hostname='192.168.122.1'
+        bricks = get_bricks(vol[:paths], hostname)
+        volargs = get_volargs(vol)
+        execute("gluster --mode=script volume create #{vol[:volname]} #{volargs} #{bricks}")
+        execute("gluster --mode=script volume start #{vol[:volname]}")
+        execute("gluster --mode=script volume set #{vol[:volname]} client-log-level DEBUG")
+        execute("gluster --mode=script volume set #{vol[:volname]} brick-log-level DEBUG")
+        puts `mkdir #{vol[:mount]}`
+        execute("mount -t glusterfs #{hostname}:/#{vol[:volname]} #{vol[:mount]}")
+end
+
+def get_volume_from_volinfo(options)
+        volinfo = `gluster volume info #{options[:volname]}`
+        if $?.to_i != 0
+                abort "No Such Volume"
+        end
+        vol = {}
+        vol[:volname] = options[:volname]
+        vol[:paths] = get_volinfo_paths(volinfo)
+        vol[:mount] = get_mount(options[:volname])
+        vol
+end
+
+def teardown_setup(vol)
+        execute("gluster --mode=script volume stop #{vol[:volname]}")
+        execute("gluster --mode=script volume delete #{vol[:volname]}")
+        execute("rm -rf #{vol[:paths]}")
+        execute("umount #{vol[:mount]}")
+end
+
+options[:replcount] = 1
+options[:stripecount] = 1
+options[:dhtcount] = 1
+optparse = OptionParser.new do|opts|
+        opts.banner = 'Usage -c command -v volname [vol-args]'
+        opts.on('-c', '--command COMMAND', 'setup/teardown/download/install') do |command|
+                if not ['s', 't', 'd', 'i'].include? command
+                        abort "Invalid command"
+                end
+                options[:command] = command
+        end
+        opts.on('-v', '--volname VOLNAME', 'volume name') do |volname|
+                options[:volname] = volname
+        end
+        opts.on('-r', '--replica COUNT', '[vol-args] replicate count') do |count|
+                if count.to_i > 1
+                        options[:replcount] = count.to_i
+                else
+                        abort "Invalid replica count"
+                end
+        end
+        opts.on('-s', '--stripe COUNT', '[vol-args] stripe count') do |count|
+                if count.to_i > 1
+                        options[:stripecount] = count.to_i
+                else
+                        abort "Invalid stripe count"
+                end
+        end
+        #optional argument
+        opts.on('-d', '--dht COUNT', '[vol-args] dht count') do |count|
+                if count.to_i > 0
+                        options[:dhtcount] = count.to_i
+                else
+                        abort "Invalid dht count"
+                end
+        end
+        opts.on('-h', '--help', 'Display this screen') do
+                puts opts
+                exit
+        end
+end
+
+abort_non_root()
+optparse.parse!(ARGV)
+abort_on_missing_args(options)
+start_glusterd()
+case options[:command]
+when 's'
+        vol = get_volume_from_options(options)
+        init_setup(vol)
+when 't'
+        vol = get_volume_from_volinfo(options)
+        teardown_setup(vol)
+when 'd'
+        version = options[:volname]
+        download_qabuild(version)
+when 'i'
+        print `./autogen.sh && ./configure && make CFLAGS=\"-DDEBUG -g3\" install -j 32 1>/dev/null`
+else
+        abort "Invalid command"
+end
