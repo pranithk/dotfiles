@@ -122,6 +122,8 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+nnoremap <Leader>d <C-w>w<C-d><C-w>w
+nnoremap <Leader>u <C-w>w<C-u><C-W>w
 "au VimResized * exe "normal! \<c-w>="
 
 nnoremap <F5> :make<CR>
