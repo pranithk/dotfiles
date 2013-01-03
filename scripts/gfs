@@ -110,9 +110,10 @@ def abort_on_missing_args(options)
         end
 end
 
-def init_setup(vol)
-        #hostname=`hostname`.chomp!
-        hostname='192.168.122.1'
+def init_setup(vol, hostname)
+        if hostname == nil
+                hostname = `hostname`.chomp!
+        end
         bricks = get_bricks(vol[:paths], hostname)
         volargs = get_volargs(vol)
         execute("gluster --mode=script volume create #{vol[:volname]} #{volargs} #{bricks}")
@@ -193,6 +194,9 @@ optparse = OptionParser.new do|opts|
         opts.on('-k', '--kill BRICK-IDS', 'comma separated brick ids') do |brick_ids|
                 options[:brick_ids] = brick_ids
         end
+        opts.on('-H', '--hostname HOSTNAME', 'hostname/ip') do |hostname|
+                options[:hostname] = hostname
+        end
         #optional argument
         opts.on('-d', '--dht COUNT', '[vol-args] dht count') do |count|
                 if count.to_i > 0
@@ -214,7 +218,7 @@ start_glusterd()
 case options[:command]
 when 's'
         vol = get_volume_from_options(options)
-        init_setup(vol)
+        init_setup(vol, options[:hostname])
 when 't'
         vol = get_volume_from_volinfo(options)
         teardown_setup(vol)
