@@ -58,14 +58,14 @@ patchlistfile = "patchlist"
 patches = create_patches(src_repo, patchlistfile)
 succeeded, failed = apply_patches(dst_repo, patches)
 
-if patches.count != 0
+if failed.count != 0
         puts "Following patches failed"
         failed.each do |patch|
                 puts patch
         end
 else
         patches.each do |patch|
-                File.unlink(patch)
+                execute ("rm -f #{patch}")
         end
         puts "go go go. :-)"
 end
