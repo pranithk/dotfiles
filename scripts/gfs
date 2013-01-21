@@ -39,7 +39,7 @@ def get_paths(options)
         paths = ""
         brick_count = options[:dhtcount] * options[:replcount] * options[:stripecount]
         for i in 0..(brick_count - 1)
-               paths += "/gfs/"+ options[:volname] + "_" + i.to_s + " "
+               paths += "/home/gfs/"+ options[:volname] + "_" + i.to_s + " "
         end
         paths
 end
