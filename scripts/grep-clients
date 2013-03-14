@@ -1,0 +1,18 @@
+logdir="var/log/glusterfs"
+for i in `ls`;
+do
+        if [ -f $i ]; then continue; fi
+        for j in `ls $i/$logdir`;
+        do
+                fpath=$i/$logdir/$j
+                if [ -d $fpath ]; then continue; fi
+                filename=$(basename "$j")
+                extention="${filename##*.}"
+                if [ "${extention}" == "gz" ];
+                then
+                        zgrep -H "$1" "$2" $fpath
+                else
+                        grep -H "$1" "$2" $fpath
+                fi
+        done
+done
