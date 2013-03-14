@@ -55,3 +55,5 @@ export GOROOT=$HOME/go
 export PATH=$PATH:$GOROOT/bin
 ulimit -c unlimited
 shopt -s histappend
+# Fix 'cd folder' mistakes automatically
+shopt -s cdspell
