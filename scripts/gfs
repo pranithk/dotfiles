@@ -118,8 +118,8 @@ def init_setup(vol, hostname)
         volargs = get_volargs(vol)
         execute("gluster --mode=script volume create #{vol[:volname]} #{volargs} #{bricks}")
         execute("gluster --mode=script volume start #{vol[:volname]}")
-        execute("gluster --mode=script volume set #{vol[:volname]} client-log-level DEBUG")
-        execute("gluster --mode=script volume set #{vol[:volname]} brick-log-level DEBUG")
+        #execute("gluster --mode=script volume set #{vol[:volname]} client-log-level DEBUG")
+        #execute("gluster --mode=script volume set #{vol[:volname]} brick-log-level DEBUG")
         puts `mkdir #{vol[:mount]}`
         execute("mount -t glusterfs #{hostname}:/#{vol[:volname]} #{vol[:mount]}")
 end
