@@ -2,7 +2,7 @@
 
 dir=~/dotfiles
 olddir=~/dotfiles_old
-top_files="bashrc vim bash_alias bash_dirs"
+top_files="bashrc vim bash_alias bash_dirs scripts"
 vim_files="vimrc gvimrc"
 
 mkdir -p $olddir
