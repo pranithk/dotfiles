@@ -79,6 +79,7 @@ PathShort="\w"
 PathFull="\W"
 NewLine="\n"
 Jobs="\j"
+Host="\h"
 
 #alias build="sudo make CFLAGS=\"-DDEBUG -Werror -g3 \" install -j 32 1>/dev/null"
 alias build="sudo make CFLAGS=\"-DDEBUG -g3 -lefence\" install -j 32 1>/dev/null"
