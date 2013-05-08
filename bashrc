@@ -43,7 +43,7 @@ function prompt_with_git {
         then
                 PS1="$NewLine$user@$Host - $BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BGreen}:) ⚡ $Color_Off"
         else
-                PS1="$NewLine$user@Host - $BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BRed}:( ⚡ $Color_Off"
+                PS1="$NewLine$user@$Host - $BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BRed}:( ⚡ $Color_Off"
         fi
 }
 
