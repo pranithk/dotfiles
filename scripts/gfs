@@ -199,7 +199,7 @@ optparse = OptionParser.new do|opts|
                 options[:hostname] = hostname
         end
         opts.on('-B', '--brick-base BRICK-BASE', 'brick base path') do |brick|
-                if Dir.exist? brick
+                if File.exist? brick
                         $base_brick_path = brick.chomp('/') + "/"
                 else
                         abort "Invalid brick base directory " + brick
