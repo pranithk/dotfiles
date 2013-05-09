@@ -3,6 +3,7 @@ require 'optparse'
 require 'net/http'
 
 options = {}
+base_brick_path = "/home/gfs/"
 
 def download_qabuild(version)
         tarball = "glusterfs-"+version+".tar.gz"
@@ -39,7 +40,7 @@ def get_paths(options)
         paths = ""
         brick_count = options[:dhtcount] * options[:replcount] * options[:stripecount]
         for i in 0..(brick_count - 1)
-               paths += "/home/gfs/"+ options[:volname] + "_" + i.to_s + " "
+               paths += $base_brick_path + options[:volname] + "_" + i.to_s + " "
         end
         paths
 end
@@ -196,6 +197,13 @@ optparse = OptionParser.new do|opts|
         end
         opts.on('-H', '--hostname HOSTNAME', 'hostname/ip') do |hostname|
                 options[:hostname] = hostname
+        end
+        opts.on('-B', '--brick-base BRICK-BASE', 'brick base path') do |brick|
+                if Dir.exist? brick
+                        $base_brick_path = brick.chomp('/') + "/"
+                else
+                        abort "Invalid brick base directory " + brick
+                end
         end
         #optional argument
         opts.on('-d', '--dht COUNT', '[vol-args] dht count') do |count|
