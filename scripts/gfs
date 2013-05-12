@@ -3,7 +3,7 @@ require 'optparse'
 require 'net/http'
 
 options = {}
-base_brick_path = "/home/gfs/"
+$base_brick_path = "/home/gfs/"
 
 def download_qabuild(version)
         tarball = "glusterfs-"+version+".tar.gz"
