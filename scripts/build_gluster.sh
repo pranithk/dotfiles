@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -rf $gluster_dir
 tar xf $1 || exit 1
 gluster_tar=${1%.*}
 gluster_dir=${gluster_tar%.*}
