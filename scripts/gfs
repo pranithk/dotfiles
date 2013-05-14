@@ -71,9 +71,12 @@ def get_volume_from_options(options)
         vol
 end
 
-def get_bricks(paths, hostname)
+def get_bricks(paths, hostnames)
         bricks=[]
+        i = 0
         paths.split().each do |path|
+                hostname=hostnames[i % hostnames.size()]
+                i = i + 1;
                 bricks.push(hostname+':'+path)
         end
         bricks.join(' ')
@@ -111,18 +114,22 @@ def abort_on_missing_args(options)
         end
 end
 
-def init_setup(vol, hostname)
-        if hostname == nil
-                hostname = `hostname`.chomp!
+def init_setup(vol, hostnames)
+        if hostnames == nil
+                hostnames = []
+                hostnames.push(`hostname`.chomp!)
         end
-        bricks = get_bricks(vol[:paths], hostname)
+        bricks = get_bricks(vol[:paths], hostnames)
         volargs = get_volargs(vol)
+        hostnames.each do |hostname|
+                execute("gluster peer probe #{hostname}")
+        end
         execute("gluster --mode=script volume create #{vol[:volname]} #{volargs} #{bricks}")
         execute("gluster --mode=script volume start #{vol[:volname]}")
         #execute("gluster --mode=script volume set #{vol[:volname]} client-log-level DEBUG")
         #execute("gluster --mode=script volume set #{vol[:volname]} brick-log-level DEBUG")
         puts `mkdir #{vol[:mount]}`
-        execute("mount -t glusterfs #{hostname}:/#{vol[:volname]} #{vol[:mount]}")
+        execute("mount -t glusterfs #{hostnames[0]}:/#{vol[:volname]} #{vol[:mount]}")
 end
 
 def get_volume_from_volinfo(options)
@@ -195,8 +202,8 @@ optparse = OptionParser.new do|opts|
         opts.on('-k', '--kill BRICK-IDS', 'comma separated brick ids') do |brick_ids|
                 options[:brick_ids] = brick_ids
         end
-        opts.on('-H', '--hostname HOSTNAME', 'hostname/ip') do |hostname|
-                options[:hostname] = hostname
+        opts.on('-H', '--hostnames HOSTNAMES', 'hostnames/ips separated by comma') do |hostnames|
+                options[:hostnames] = hostnames.split(",")
         end
         opts.on('-B', '--brick-base BRICK-BASE', 'brick base path') do |brick|
                 if File.exist? brick
@@ -226,7 +233,7 @@ start_glusterd()
 case options[:command]
 when 's'
         vol = get_volume_from_options(options)
-        init_setup(vol, options[:hostname])
+        init_setup(vol, options[:hostnames])
 when 't'
         vol = get_volume_from_volinfo(options)
         teardown_setup(vol)
