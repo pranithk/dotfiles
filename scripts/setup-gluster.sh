@@ -5,7 +5,7 @@ gluster_dir=${gluster_tar%.*}
 hostsfile=$2
 rm -f $tgz_name
 make distclean
-./autogen.sh && ./configure && make CFLAGS="-g3 -DDEBUG" install -j 32 1>/dev/null && make dist
+./autogen.sh && ./configure --enable-fusermount && make CFLAGS="-g3 -DDEBUG" install -j 32 1>/dev/null && make dist
 for host in `cat $hostsfile`
 do
         scp $tgz_name root@$host:
