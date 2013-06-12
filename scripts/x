@@ -1,0 +1,2 @@
+#!/bin/bash
+getfattr -d -m. -e hex $1
