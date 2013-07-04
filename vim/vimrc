@@ -15,7 +15,6 @@ set lazyredraw                                          " Don't redraw screen wh
 set ignorecase
 set incsearch
 set hlsearch
-set gdefault
 set smartcase
 set showmatch
 
@@ -40,13 +39,14 @@ set encoding=utf-8
 set scrolloff=0
 set showcmd
 set hidden
-set wildmenu
 set wildmode=list:longest
+set wildmenu
 set cursorline
 set ttyfast
 set ruler
 set backspace=indent,eol,start
 set relativenumber
+set history=200 "Remember upto 200 commands
 
 "set makeprg=sudo\ make\ -j\ 32\ install\ CFLAGS=\"-DDEBUG\ -g3\ -O0\"
 set makeprg=sudo\ make\ -j\ 32\ install\ CFLAGS=\"-DDEBUG\ -Werror\ -g3\ -O0\"
@@ -136,4 +136,7 @@ nnoremap <C-p> :cp<CR>
 inoremap <C-v> <C-r>*
 vnoremap <C-c> "+y
 cnoremap w!! !sudo tee > /dev/null %
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+cnoremap <expr> %% getcmdtype() == ':' ? expand ('%:h').'/' : '%%'
 call pathogen#infect()
