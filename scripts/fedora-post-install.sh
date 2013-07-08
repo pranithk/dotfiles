@@ -45,3 +45,6 @@ yum -y install cscope valgrind
 
 #install strace
 yum -y install strace
+
+#irc
+yum -y install pidgin

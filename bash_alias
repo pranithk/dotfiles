@@ -83,7 +83,7 @@ Host="\h"
 
 #alias build="sudo make CFLAGS=\"-DDEBUG -Werror -g3 \" install -j 32 1>/dev/null"
 alias build="sudo make CFLAGS=\"-DDEBUG -g3 -lefence\" install -j 32 1>/dev/null"
-alias nbuild="sudo make CFLAGS=\"-DDEBUG -g3\" install -j 32 1>/dev/null"
+alias nbuild="sudo make CFLAGS=\"-DDEBUG -g3 -fsanitize=address -fno-omit-frame-pointer\" install -j 32 1>/dev/null"
 alias gcovbuild="sudo make CFLAGS=\"-DDEBUG -g3 -fprofile-arcs -ftest-coverage -lgcov --coverage\" install -j 32 1>/dev/null"
 alias lgluster='ps aux | grep gluster'
 alias fpid="ps aux | grep gluster | grep 'volfile-id=' | awk '{print \$2}'"
