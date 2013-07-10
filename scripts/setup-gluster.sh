@@ -1,4 +1,9 @@
 #!/bin/bash
+if [ "$#" -ne 2 ];
+then
+        echo "Usage: $0 <gluster-tar-file-name> <file-with-hosts>";
+        exit 0;
+fi
 tgz_name=$1
 gluster_tar=${1%.*}
 gluster_dir=${gluster_tar%.*}
