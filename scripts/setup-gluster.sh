@@ -11,6 +11,11 @@ hostsfile=$2
 rm -f $tgz_name
 make distclean
 ./autogen.sh && ./configure --enable-fusermount && make CFLAGS="-g3 -DDEBUG" install -j 32 1>/dev/null && make dist
+if [ ! -f $tgz_name ];
+then
+        exit "Tar file specified $tgz_name is not present"
+fi
+
 for host in `cat $hostsfile`
 do
         scp $tgz_name root@$host:
