@@ -1,6 +1,6 @@
 #!/bin/bash -x
 #install glusterfs dev-tools
-yum -y install git libtool autoconf automake flex bison openssl openssl-devel libibverbs-devel readline-devel libxml-devel libaio-devel libxml2-devel
+yum -y install git libtool autoconf automake flex bison openssl openssl-devel libibverbs-devel readline-devel libxml-devel libaio-devel libxml2-devel librdmacm librdmacm-devel
 #install awesome vim
 yum -y install vim-X11
 #install ruby
