@@ -1,5 +1,5 @@
 source $HOME/.vimrc
-set guifont=Aurulent\ Sans\ Mono\ 12
+set guifont=Inconsolata\ Medium\ 11
 "colorscheme gravity
 colorscheme solarized
 set guioptions-=m "remove menubar
