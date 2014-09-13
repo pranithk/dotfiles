@@ -19,7 +19,7 @@ fi
 for host in `cat $hostsfile`
 do
         scp $tgz_name root@$host:
-        echo "tar xzf $tgz_name && cd $gluster_dir && find . | xargs touch && ./autogen.sh && ./configure --enable-fusermount && make CFLAGS=\"-DDEBUG -g3\" install -j 32 1>/dev/null" | ssh root@$host bash -xs  &
+        echo "tar xzf $tgz_name && cd $gluster_dir && find . | xargs touch && ./autogen.sh && ./configure --enable-fusermount && make CFLAGS=\"-DDEBUG -g3 -O0\" install -j 32 1>/dev/null" | ssh root@$host bash -xs  &
 done
 wait
 
