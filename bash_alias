@@ -81,15 +81,35 @@ NewLine="\n"
 Jobs="\j"
 Host="\h"
 
-#alias build="sudo make CFLAGS=\"-DDEBUG -Werror -g3 \" install -j 32 1>/dev/null"
-alias build="sudo make CFLAGS=\"-DDEBUG -g3 -lefence\" install -j 32 1>/dev/null"
-alias nbuild="sudo make CFLAGS=\"-DDEBUG -g3 -fsanitize=address -fno-omit-frame-pointer\" install -j 32 1>/dev/null"
+alias fbuild="sudo rm -rf /usr/local/lib/*; sudo make distclean; ./autogen.sh && sudo ./configure --enable-fusermount && sudo make CFLAGS=\"-DDEBUG -g3 \" install -j 32 1>/dev/null"
 alias gcovbuild="sudo make CFLAGS=\"-DDEBUG -g3 -fprofile-arcs -ftest-coverage -lgcov --coverage\" install -j 32 1>/dev/null"
-alias lgluster='ps aux | grep gluster'
-alias fpid="ps aux | grep gluster | grep 'volfile-id=' | awk '{print \$2}'"
 alias g="git "
-alias v="gvim --remote-silent"
 alias irb='irb --readline -r irb/completion'
 alias cdr='cd ./$(git rev-parse --show-cdup)'
 alias vim='vimx'
-alias todo="gvim -c 'source ~/workspace/TODO/todo'"
+alias gitcc="git log --author=Pranith --format=\"format:%cd\" --date=short | cut -f1,2 -d'-' | sort -r | uniq -c | less"
+
+function up {
+        git fetch && git rebase origin/$1
+}
+
+function fpid {
+        ps aux | grep gluster | grep 'volfile-id=' | awk '{print $2}'
+}
+
+function lg {
+        ps aux | grep gluster
+}
+
+function commits {
+        local b="$1"
+        if [ -z $b ]; then b="origin/master"; fi
+        git log $b --since=`date +%D | awk 'BEGIN {FS=OFS="/"} {$2="01";print $0}'` | awk '/^Author/ {commits[$NF]++} END {for (author in commits) print author, commits[author]}' | sort -nrk2 | column -t
+}
+
+function crefi_create {
+local m="$1"
+if [ -z $m ]; then $m="."; fi
+crefi -T 10 -n 10 --multi -d 10 -b 10 --size=10k $m
+}
+source /etc/profile.d/autojump.bash
