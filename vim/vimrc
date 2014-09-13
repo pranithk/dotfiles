@@ -139,4 +139,10 @@ cnoremap w!! !sudo tee > /dev/null %
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 cnoremap <expr> %% getcmdtype() == ':' ? expand ('%:h').'/' : '%%'
-call pathogen#infect()
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'altercation/vim-colors-solarized.git'
+Plugin 'sickill/vim-pasta'
+Plugin 'Shougo/unite.vim'
+call vundle#end()
