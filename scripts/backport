@@ -51,7 +51,7 @@ def apply_patches(repo, patches)
         return succeeded, failed
 end
 
-workspace = "/home/pranithk/workspace/"
+workspace = "/home/pk/workspace/"
 src_repo = workspace + "gerrit-repo/"
 dst_repo = workspace + "rhs-glusterfs/"
 patchlistfile = "patchlist"
