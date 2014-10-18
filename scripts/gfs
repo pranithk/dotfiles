@@ -124,7 +124,8 @@ def init_setup(vol, hostnames)
         hostnames.each do |hostname|
                 execute("gluster peer probe #{hostname}")
         end
-        execute("gluster --mode=script volume create #{vol[:volname]} #{volargs} #{bricks}")
+        #execute("gluster --mode=script volume create #{vol[:volname]} #{volargs} #{bricks}")
+        execute("gluster --mode=script --wignore volume create #{vol[:volname]} #{volargs} #{bricks}")
         execute("gluster --mode=script volume start #{vol[:volname]}")
         #execute("gluster --mode=script volume set #{vol[:volname]} client-log-level DEBUG")
         #execute("gluster --mode=script volume set #{vol[:volname]} brick-log-level DEBUG")
