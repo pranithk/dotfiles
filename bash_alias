@@ -82,6 +82,7 @@ Jobs="\j"
 Host="\h"
 
 alias fbuild="sudo rm -rf /usr/local/lib/*; sudo make distclean; ./autogen.sh && sudo ./configure --enable-fusermount && sudo make CFLAGS=\"-DDEBUG -g3 \" install -j 32 1>/dev/null"
+alias mbuild="sudo make CFLAGS=\"-DDEBUG -g3 \" install -j 32 1>/dev/null"
 alias gcovbuild="sudo make CFLAGS=\"-DDEBUG -g3 -fprofile-arcs -ftest-coverage -lgcov --coverage\" install -j 32 1>/dev/null"
 alias g="git "
 alias irb='irb --readline -r irb/completion'
@@ -105,6 +106,18 @@ function commits {
         local b="$1"
         if [ -z $b ]; then b="origin/master"; fi
         git log $b --since=`date +%D | awk 'BEGIN {FS=OFS="/"} {$2="01";print $0}'` | awk '/^Author/ {commits[$NF]++} END {for (author in commits) print author, commits[author]}' | sort -nrk2 | column -t
+}
+
+function commits_year {
+        local b="$1"
+        if [ -z $b ]; then b="origin/master"; fi
+        git log $b --since=`date +%D | awk 'BEGIN {FS=OFS="/"} {$2="01";$1="01";print $0}'` | awk '/^Author/ {commits[$NF]++} END {for (author in commits) print author, commits[author]}' | sort -nrk2 | column -t
+}
+
+function commits_100 {
+        local b="$1"
+        if [ -z $b ]; then b="origin/master"; fi
+        git log $b -100 | awk '/^Author/ {commits[$NF]++} END {for (author in commits) print author, commits[author]}' | sort -nrk2 | column -t
 }
 
 function crefi_create {
