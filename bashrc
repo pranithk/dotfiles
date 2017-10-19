@@ -51,9 +51,8 @@ PROMPT_COMMAND=prompt_with_git
 
 export EF_ALIGNMENT=0
 export PATH=$PATH:~/.scripts
-export GOROOT=$HOME/go
-export PATH=$PATH:$GOROOT/bin
 ulimit -c unlimited
 shopt -s histappend
 # Fix 'cd folder' mistakes automatically
 shopt -s cdspell
+export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
