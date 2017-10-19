@@ -1,2 +1,2 @@
 #!/bin/bash
-find . -iname "*rej*"
+find . -iname "*rej"
