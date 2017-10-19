@@ -91,14 +91,9 @@ set tags=tags
 highlight Normal     guifg=gray guibg=black
 """"" Mappings
 
-"gluster work specific
-nnoremap <Leader>afr :args xlators/cluster/afr/src/*.c<CR>
-nnoremap <Leader>gd :args xlators/mgmt/glusterd/src/*.c<CR>
-
-nnoremap <Leader>f :cs f f 
+nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>cd :cd %:p:h<CR>
 nnoremap <Leader>cd- :cd -<CR>
-nnoremap <Leader>f :cs f f 
 nnoremap <Leader>a :Tabularize /[a-zA-Z0-9_*]*\s*=<CR>:Tabularize /=<CR>
 vnoremap <Leader>a :Tabularize /[a-zA-Z0-9_*]*\s*=<CR>:Tabularize /=<CR>
 
@@ -140,9 +135,15 @@ cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 cnoremap <expr> %% getcmdtype() == ':' ? expand ('%:h').'/' : '%%'
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'altercation/vim-colors-solarized.git'
-Plugin 'sickill/vim-pasta'
-Plugin 'Shougo/unite.vim'
-call vundle#end()
+packadd minpac
+call minpac#init()
+
+call minpac#add('sickill/vim-pasta')
+call minpac#add('tpope/vim-fugitive')
+call minpac#add('k-takata/minpac', {'type':'opt'})
+call minpac#add('altercation/vim-colors-solarized')
+call minpac#add('junegunn/fzf')
+call minpac#add('junegunn/fzf.vim')
+
+command! PackUpdate call minpac#update()
+command! PackClean call minpac#clean()
