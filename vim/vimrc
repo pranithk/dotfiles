@@ -68,6 +68,9 @@ set autowrite
 set wrap
 "set textwidth=80
 set formatoptions=qrn1
+if v:version > 703 || v:version == 703 && has('patch541')
+  set formatoptions+=j
+endif
 set colorcolumn=81
 highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
 match ExtraWhitespace /\s\+$/
