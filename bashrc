@@ -50,9 +50,13 @@ function prompt_with_git {
 PROMPT_COMMAND=prompt_with_git
 
 export EF_ALIGNMENT=0
-export PATH=$PATH:~/.scripts
 ulimit -c unlimited
 shopt -s histappend
 # Fix 'cd folder' mistakes automatically
 shopt -s cdspell
 export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
+export GOPATH=$HOME/go
+export PATH=$PATH:~/.scripts:$GOPATH/bin
+
+# added by Miniconda3 installer
+export PATH="/home/pk/miniconda3/bin:$PATH"

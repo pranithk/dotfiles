@@ -82,7 +82,8 @@ Jobs="\j"
 Host="\h"
 
 alias fbuild="sudo rm -rf /usr/local/lib/*; sudo make distclean; ./autogen.sh && sudo ./configure --enable-gnfs --disable-mempool && sudo make CFLAGS=\"-Wall -DDEBUG -g3 -O0 -fno-omit-frame-pointer\" install -j 32 1>/dev/null"
-alias asanbuild="sudo rm -rf /usr/local/lib/*; sudo make distclean; ./autogen.sh && sudo ./configure --enable-gnfs --disable-mempool && sudo make CFLAGS=\"-Wall -DDEBUG -g3 -O0 -fsanitize=address -fno-omit-frame-pointer\" install -j 32 1>/dev/null"
+alias dbuild="sudo rm -rf /usr/local/lib/*; sudo make distclean; ./autogen.sh && sudo ./configure --with-libtirpc && sudo make CFLAGS=\"-Wall -DDEBUG -g3 -O0 -fno-omit-frame-pointer\" install -j 32 1>/dev/null"
+alias asanbuild="sudo rm -rf /usr/local/lib/*; sudo make distclean; ./autogen.sh && sudo ./configure --enable-gnfs --disable-mempool && sudo make CFLAGS=\"-Wall -DDEBUG -g3 -O0 -fsanitize=address -fno-omit-frame-pointer -lasan\" install -j 32 1>/dev/null"
 alias mbuild="sudo make CFLAGS=\"-DDEBUG -g3 -Wall -O0\" install -j 32 1>/dev/null"
 alias gcovbuild="sudo make CFLAGS=\"-DDEBUG -g3 -fprofile-arcs -ftest-coverage -lgcov --coverage\" install -j 32 1>/dev/null"
 alias g="git "
@@ -138,4 +139,9 @@ local m="$1"
 if [ -z $m ]; then $m="."; fi
 crefi -T 10 -n 10 --multi -d 10 -b 10 --size=10k $m
 }
+
+function clang_check {
+    git show --pretty="format:" --name-only | grep -v "contrib/" | egrep --color=never "*\.[ch]$" | xargs clang-format -i
+}
+
 source /etc/profile.d/autojump.bash

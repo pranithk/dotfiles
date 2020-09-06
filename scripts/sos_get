@@ -1,11 +1,24 @@
 #!/bin/bash
+trap "exit" INT TERM
+trap "kill 0" EXIT
+
 url=$1
 wget $url -O out
+
+function download_and_extract {
+    echo "$url/$file"
+    local url=$1
+    local file=$2
+    wget $url/$file
+    xz -d $file
+    tar xvf ${file%%.xz}
+    rm -f   ${file%%.xz}
+
+}
+
 for file in $(grep tar.xz out | sed -E 's/.*href="([^"]*).*/\1/g')
 do
-        echo "$url/$file"
-        wget $url/$file
-        xz -d $file
-        tar xvf ${file%%.xz}
-        rm -f   ${file%%.xz}
+    download_and_extract $url $file &
 done
+
+wait

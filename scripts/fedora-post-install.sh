@@ -48,3 +48,4 @@ dnf -y install strace
 
 #irc
 dnf -y install pidgin
+dnf -y install terminator
