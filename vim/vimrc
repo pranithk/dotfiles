@@ -19,8 +19,10 @@ set smartcase
 set showmatch
 
 "status line
-set showmode
-set laststatus=2
+let g:airline#extensions#tabline#enabled = 1
+
+"set showmode
+"set laststatus=2
 "set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l/%L:%c
 
 " Make vim silent
@@ -100,6 +102,8 @@ highlight Normal     guifg=gray guibg=black
 
 nmap gx yiW:!xdg-open <cWORD><CR> <C-r>" & <CR><CR>
 nnoremap <Leader>f :Files<CR>
+nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader>m :Marks<CR>
 nnoremap <Leader>cd :cd %:p:h<CR>
 nnoremap <Leader>cd- :cd -<CR>
 
@@ -130,7 +134,6 @@ nnoremap <Leader>u <C-w>w<C-u><C-W>w
 nnoremap <F5> :make<CR>
 nnoremap <F3> a<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
 inoremap <F3> <C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR>
-nnoremap <C-@> :buffers<CR>:buffer<Space>
 " use enter and shift + enter to give new lines
 nnoremap <C-n> :cn<CR>
 nnoremap <C-p> :cp<CR>
@@ -152,4 +155,5 @@ Plug 'tpope/vim-fugitive'
 Plug 'altercation/vim-colors-solarized'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'vim-airline/vim-airline'
 call plug#end()
