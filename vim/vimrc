@@ -102,8 +102,6 @@ nmap gx yiW:!xdg-open <cWORD><CR> <C-r>" & <CR><CR>
 nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>cd :cd %:p:h<CR>
 nnoremap <Leader>cd- :cd -<CR>
-nnoremap <Leader>a :Tabularize /[a-zA-Z0-9_*]*\s*=<CR>:Tabularize /=<CR>
-vnoremap <Leader>a :Tabularize /[a-zA-Z0-9_*]*\s*=<CR>:Tabularize /=<CR>
 
 noremap ; :
 inoremap jj <ESC>
