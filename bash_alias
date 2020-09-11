@@ -89,6 +89,8 @@ alias gcovbuild="sudo make CFLAGS=\"-DDEBUG -g3 -fprofile-arcs -ftest-coverage -
 alias g="git "
 alias irb='irb --readline -r irb/completion'
 alias cdr='cd ./$(git rev-parse --show-cdup)'
+alias open='xdg-open &>/dev/null'
+alias clipboard="xclip -selection clipboard"
 
 function gitcc {
         a="$1"
