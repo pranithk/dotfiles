@@ -19,10 +19,8 @@ set smartcase
 set showmatch
 
 "status line
-let g:airline#extensions#tabline#enabled = 1
-
 "set showmode
-"set laststatus=2
+set laststatus=2
 "set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l/%L:%c
 
 " Make vim silent
@@ -112,6 +110,12 @@ inoremap jj <ESC>
 cnoremap jj <ESC>
 nnoremap j gj
 nnoremap k gk
+
+"Disable arrow keys
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
 
 nnoremap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 nnoremap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
