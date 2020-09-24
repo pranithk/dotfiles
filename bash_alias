@@ -91,6 +91,7 @@ alias irb='irb --readline -r irb/completion'
 alias cdr='cd ./$(git rev-parse --show-cdup)'
 alias open='xdg-open &>/dev/null'
 alias clipboard="xclip -selection clipboard"
+alias ls='ls --color'
 
 function gitcc {
         a="$1"
