@@ -1,0 +1,11 @@
+[user]
+	name = Pranith Kumar K
+	email = pranith.karampuri@phonepe.com
+[alias]
+	co = checkout
+	b = branch
+	d = diff
+	cma = commit -s -a -m
+	caa = commit -s -a --amend
+	can = commit -s -a --amend --no-edit
+	sh = show
