@@ -23,8 +23,10 @@ function parse_git_branch {
             git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 
+PROMPT_COMMAND=prompt_with_git
+
 function prompt_with_git {
-        EXITSTATUS="$?"
+        local EXITSTATUS=$?
         branch=$(parse_git_branch)
         modified=$(git diff 2>/dev/null| wc -l)
         if [ $modified != 0 ];
@@ -39,15 +41,13 @@ function prompt_with_git {
         else
                 user=$BGreen$User
         fi
-        if [ "${EXITSTATUS}" -eq 0 ]
+        if [ ${EXITSTATUS} -eq 0 ]
         then
                 PS1="$NewLine$user@$Host - $BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BGreen}:) ⚡ $Color_Off"
         else
                 PS1="$NewLine$user@$Host - $BBlue$PathShort ${branch}$NewLine$Cyan$Time24h ${BRed}:( ⚡ $Color_Off"
         fi
 }
-
-PROMPT_COMMAND=prompt_with_git
 
 export EF_ALIGNMENT=0
 ulimit -c unlimited
@@ -57,6 +57,9 @@ shopt -s cdspell
 export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
 export GOPATH=$HOME/go
 export PATH=$PATH:~/.scripts:$GOPATH/bin
+export PATH=$PATH:$HOME/.jenv/bin
 
 # added by Miniconda3 installer
 export PATH="/home/pk/miniconda3/bin:$PATH"
+#eval "$(jenv init -)"
+export EDITOR=nvim

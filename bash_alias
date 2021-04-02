@@ -81,7 +81,7 @@ NewLine="\n"
 Jobs="\j"
 Host="\h"
 
-alias fbuild="sudo rm -rf /usr/local/lib/*; sudo make distclean; ./autogen.sh && sudo ./configure --enable-gnfs --disable-mempool && sudo make CFLAGS=\"-Wall -DDEBUG -g3 -O0 -fno-omit-frame-pointer\" install -j 32 1>/dev/null"
+alias fbuild="sudo rm -rf /usr/local/lib/*; sudo make distclean; ./autogen.sh && sudo ./configure --enable-gnfs --disable-mempool --disable-linux-io_uring && sudo make CFLAGS=\"-Wall -DDEBUG -g3 -O0 -fno-omit-frame-pointer\" install -j 32 1>/dev/null"
 alias dbuild="sudo rm -rf /usr/local/lib/*; sudo make distclean; ./autogen.sh && sudo ./configure --with-libtirpc && sudo make CFLAGS=\"-Wall -DDEBUG -g3 -O0 -fno-omit-frame-pointer\" install -j 32 1>/dev/null"
 alias asanbuild="sudo rm -rf /usr/local/lib/*; sudo make distclean; ./autogen.sh && sudo ./configure --enable-gnfs --disable-mempool && sudo make CFLAGS=\"-Wall -DDEBUG -g3 -O0 -fsanitize=address -fno-omit-frame-pointer -lasan\" install -j 32 1>/dev/null"
 alias mbuild="sudo make CFLAGS=\"-DDEBUG -g3 -Wall -O0\" install -j 32 1>/dev/null"
@@ -92,6 +92,7 @@ alias cdr='cd ./$(git rev-parse --show-cdup)'
 alias open='xdg-open &>/dev/null'
 alias clipboard="xclip -selection clipboard"
 alias ls='ls --color'
+alias vim='nvim'
 
 function gitcc {
         a="$1"
@@ -147,4 +148,11 @@ function clang_check {
     git show --pretty="format:" --name-only | grep -v "contrib/" | egrep --color=never "*\.[ch]$" | xargs clang-format -i
 }
 
-source /etc/profile.d/autojump.bash
+function gpush {
+    git push -f origin $(git branch --show-current)
+}
+
+if [ -f /etc/profile.d/autojump.bash ];
+then
+    source /etc/profile.d/autojump.bash
+fi

@@ -1,3 +1,4 @@
+#!/bin/bash
 rm -f cscope*
 find . -name "*.c" -o -name "*.h" > cscope.files
 cscope -b -k

@@ -1,11 +1,5 @@
-pushd -n /home/$USER/code-reading/youtube-dl > /dev/null
 pushd -n /home/$USER/.scripts > /dev/null
+pushd -n /var/lib/glusterd > /dev/null
 pushd -n /usr/local/var/log/glusterfs/bricks > /dev/null
 pushd -n /usr/local/var/log/glusterfs/ > /dev/null
-pushd -n /var/lib/glusterd > /dev/null
-pushd -n /home/$USER/workspace/gluster-tests/afr > /dev/null
-pushd -n /home/$USER/workspace/gerrit-repo/tests/bugs > /dev/null
-pushd -n /home/$USER/workspace/gerrit-repo/libglusterfs/src/ > /dev/null
-pushd -n /home/$USER/workspace/gerrit-repo/xlators/mgmt/glusterd/src/ > /dev/null
-pushd -n /home/$USER/workspace/gerrit-repo/xlators/cluster/afr/src/ > /dev/null
-pushd -n /home/$USER/workspace/gerrit-repo/ > /dev/null
+pushd -n /home/$USER/workspace/glusterfs/ > /dev/null

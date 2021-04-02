@@ -9,3 +9,5 @@
 	caa = commit -s -a --amend
 	can = commit -s -a --amend --no-edit
 	sh = show
+    f = fetch
+    l = log

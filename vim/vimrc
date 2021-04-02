@@ -161,3 +161,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 call plug#end()
+
+set updatetime=200
+autocmd CursorHold,CursorHoldI * update
